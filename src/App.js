@@ -37,7 +37,7 @@ function App() {
 
   return (
     <>
-      {/* <Recharts data={chartData} /> */}
+      <Recharts data={chartData} />
       <ReactChartsJS2 data={chartData} />
     </>
   );
