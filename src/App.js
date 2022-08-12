@@ -1,45 +1,55 @@
-import React, { useState, useEffect } from "react";
-import Recharts from "./components/Recharts";
-import data from "./data/data";
-import ReactChartsJS2 from "./components/ReactChartsJS2";
+import React from "react";
+import { Line } from "react-chartjs-2";
+import Chart from "chart.js/auto";
+import ChartStreaming from "chartjs-plugin-streaming";
+import "chartjs-adapter-moment";
 
-const sortedDataAsc = [...data].sort((a, b) => {
-  if (a.name > b.name) return 1;
-  else return -1;
-});
+Chart.register(ChartStreaming);
 
-const sortedDataDsc = [...data].sort((a, b) => {
-  if (a.name > b.name) return -1;
-  else return 1;
-});
+const data = {
+  datasets: [
+    {
+      label: "Price Trend",
+      backgroundColor: "#3B82F6",
+      borderColor: "#3B82F6",
+      data: [],
+    },
+  ],
+};
+
+const options = {
+  scales: {
+    x: {
+      type: "realtime",
+      realtime: {
+        onRefresh: function () {
+          data.datasets[0].data.push({
+            x: Date.now(),
+            y: Math.random() * 500 + 1000,
+          });
+        },
+        delay: 1500,
+        refresh: 300,
+      },
+    },
+  },
+  plugins: {
+    tooltip: {
+      enabled: false,
+    },
+  },
+  elements: {
+    point: {
+      radius: 0,
+    },
+  },
+};
 
 function App() {
-  const [chartData, setChartData] = useState();
-
-  const testChangingData = () => {
-    setTimeout(() => {
-      setChartData(data);
-    }, 1000);
-
-    setTimeout(() => {
-      setChartData(sortedDataAsc);
-    }, 2000);
-
-    setTimeout(() => {
-      setChartData(sortedDataDsc);
-    }, 3000);
-  };
-
-  useEffect(() => {
-    setTimeout(() => testChangingData());
-    setInterval(() => testChangingData(), 3000);
-  }, []);
-
   return (
-    <>
-      <Recharts data={chartData} />
-      <ReactChartsJS2 data={chartData} />
-    </>
+    <div style={{ width: "65vw" }}>
+      <Line data={data} options={options} />
+    </div>
   );
 }
 
