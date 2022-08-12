@@ -10,8 +10,8 @@ const data = {
   datasets: [
     {
       label: "Price Trend",
-      backgroundColor: "#3B82F6",
-      borderColor: "#3B82F6",
+      backgroundColor: "#0C9D7B",
+      borderColor: "#0C9D7B",
       data: [],
     },
   ],
@@ -21,6 +21,9 @@ const options = {
   scales: {
     x: {
       type: "realtime",
+      grid: {
+        display: false,
+      },
       realtime: {
         onRefresh: function () {
           data.datasets[0].data.push({
@@ -28,9 +31,13 @@ const options = {
             y: Math.random() * 500 + 1000,
           });
         },
-        delay: 1500,
+        delay: 400,
         refresh: 300,
       },
+    },
+
+    y: {
+      grid: { display: false },
     },
   },
   plugins: {
